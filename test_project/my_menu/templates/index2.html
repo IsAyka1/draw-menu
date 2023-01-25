@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load draw_menu %}
+{% block contaniner %}
+
+{% for menu in roots %}
+<!--  <div class="welcome-single-slide">-->
+    <div class="list" id="sub">
+      <h3>{{menu.name}}</h3>
+      {% draw_menu menu %}
+    </div>
+  {% endfor %}
+{% endblock %}
