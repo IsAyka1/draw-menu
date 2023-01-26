@@ -1,5 +1,6 @@
 {% load draw_menu %}
 {% if to_draw %}
+
       <ul>
         {% if menu.name == selected_name %}
           <li ><strong><a href="{% url 'select' url=menu.url selected=menu.name %}">{{ menu.name }}</a></strong></li>

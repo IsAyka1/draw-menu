@@ -7,10 +7,12 @@ def redirect_menu(request):
 
 
 def index(request, *args, **kwargs):
+    print('index')
     return render(request, 'base.html', context={})
 
 
 def show_selected(request, *args, **kwargs):
+    print('selected')
     context = {
         'selected_name': kwargs['selected']
     }

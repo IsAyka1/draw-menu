@@ -9,7 +9,8 @@ register = template.Library()
 def draw_menu(context, menu: str | Menu):
     if isinstance(menu, str):
         try:
-            menu = Menu.objects.filter(name=menu)[0]
+            context['selected_name'] = context.get('selected_name', menu)
+            menu = Menu.objects.filter(name=menu)[0].root
         except IndexError:
             return {
                 'to_draw': False

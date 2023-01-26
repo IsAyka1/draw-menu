@@ -9,14 +9,19 @@ class Menu(models.Model):
     parent = models.ForeignKey(to='self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
     # position = models.IntegerField(blank=True, null=True)
     level = models.IntegerField(blank=True, null=True)
+    root = models.ForeignKey(to='self', blank=True, null=True, related_name='head', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         super(Menu, self).save(*args, **kwargs)
         self.set_mptt()
 
-    def set_mptt(self, left=1, parent=None, level=1):
+    def set_mptt(self, left=1, parent=None, level=1, root=None):
         for i in type(self).objects.filter(parent=parent):
+            if i.parent is None:
+                root = i
             obj, children_count = i, 0
+            # obj.root = root
+            # print(obj, obj.root)
             while obj.children.exists():
                 for child in obj.children.all():
                     children_count += 1
@@ -25,10 +30,11 @@ class Menu(models.Model):
                 'level': level,
                 'left': left,
                 'right': left + (children_count * 2) + 1,
+                'root': root
             }
             type(self).objects.filter(id=i.id).update(**data)
             left = data['right'] + 1
-            self.set_mptt(left=data['left'] + 1, parent=i.id, level=data['level'] + 1)
+            self.set_mptt(left=data['left'] + 1, parent=i.id, level=data['level'] + 1, root=root)
 
     def __str__(self):
         return self.name
@@ -38,3 +44,6 @@ class Menu(models.Model):
 
     def display_parent(self):
         return '\n'.join(item.name for item in Menu.objects.all())
+
+    def display_root(self):
+        return str(self.root)

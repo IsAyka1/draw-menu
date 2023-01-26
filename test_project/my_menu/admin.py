@@ -9,6 +9,6 @@ from .models import Menu
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('name', 'url', 'parent', 'display_children')
+    list_display = ('name', 'url', 'parent', 'display_children', 'root')
     fields = ['name', 'url', 'parent']
     # inlines = [MenuInline]
