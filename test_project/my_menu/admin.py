@@ -3,12 +3,12 @@ from .models import Menu
 # Register your models here.
 
 
-class MenuInline(admin.StackedInline):
-    model = Menu.children.through
+# class MenuInline(admin.StackedInline):
+#     model = Menu.children.through
 
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('name', 'url', 'is_root', 'display_children')
-    fields = ['name', 'url', 'is_root', 'children']
+    list_display = ('name', 'url', 'parent', 'display_children')
+    fields = ['name', 'url', 'parent']
     # inlines = [MenuInline]

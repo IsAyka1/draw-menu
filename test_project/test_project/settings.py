@@ -10,23 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+
 from pathlib import Path
 import os
+
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o33^ml4kp96mb#t30hoq$qgi*7(brlsxs()1b9_#53w46yl!l-'
+SECRET_KEY = env('SECRET_KEY', default="unsafe-secret-key")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [env('DATABASE_HOST')]
 
 
 # Application definition
@@ -68,7 +72,6 @@ TEMPLATES = [
             ],
             'libraries': {
                 'draw_menu': 'test_project.templatetags.draw_menu',
-
             },
         },
     },
@@ -83,11 +86,11 @@ WSGI_APPLICATION = 'test_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_menu',
-        'USER': 'admin',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST', default='localhost'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
